@@ -62,23 +62,23 @@ file(MAKE_DIRECTORY ${BUILD_DIR_PATH})
 set(SRC_DIR_PATH "${CMAKE_SOURCE_DIR}/src/")
 
 set(SRC_LIST_ALL "${SRC_DIR_PATH}/Package/PackageConfiguration.cpp"
-			     "${SRC_DIR_PATH}/Package/PackageConfiguration.h"
-			     "${SRC_DIR_PATH}/Package/PackageService.cpp"
-				 "${SRC_DIR_PATH}/Package/PackageService.h"
-				 "${SRC_DIR_PATH}/Package/PackagePaths.h"
-				 "${SRC_DIR_PATH}/Event/EventHandler.cpp"
-				 "${SRC_DIR_PATH}/Event/EventHandler.h"
-				 "${SRC_DIR_PATH}/Event/EventContainer.cpp"
-				 "${SRC_DIR_PATH}/Event/EventContainer.h"
-				 "${SRC_DIR_PATH}/Environment.cpp"
-				 "${SRC_DIR_PATH}/Environment.h"
-				 "${SRC_DIR_PATH}/Logger.cpp"
-				 "${SRC_DIR_PATH}/Logger.h"
-				 "${SRC_DIR_PATH}/Timer.cpp"
-				 "${SRC_DIR_PATH}/Timer.h"
-				 "${SRC_DIR_PATH}/Exception.h"
-				 "${SRC_DIR_PATH}/Revision.h"
-				 "${SRC_DIR_PATH}/Main.cpp")
+                 "${SRC_DIR_PATH}/Package/PackageConfiguration.h"
+                 "${SRC_DIR_PATH}/Package/PackageService.cpp"
+                 "${SRC_DIR_PATH}/Package/PackageService.h"
+                 "${SRC_DIR_PATH}/Package/PackagePaths.h"
+                 "${SRC_DIR_PATH}/Event/EventHandler.cpp"
+                 "${SRC_DIR_PATH}/Event/EventHandler.h"
+                 "${SRC_DIR_PATH}/Event/EventContainer.cpp"
+                 "${SRC_DIR_PATH}/Event/EventContainer.h"
+                 "${SRC_DIR_PATH}/Environment.cpp"
+                 "${SRC_DIR_PATH}/Environment.h"
+                 "${SRC_DIR_PATH}/Logger.cpp"
+                 "${SRC_DIR_PATH}/Logger.h"
+                 "${SRC_DIR_PATH}/Timer.cpp"
+                 "${SRC_DIR_PATH}/Timer.h"
+                 "${SRC_DIR_PATH}/Exception.h"
+                 "${SRC_DIR_PATH}/Revision.h"
+                 "${SRC_DIR_PATH}/Main.cpp")
 
 ###
 #  Library Paths
@@ -93,8 +93,8 @@ set(INCLUDE_DIR_PATH "${CMAKE_SOURCE_DIR}/include/")
 set(LIB_BIN_LIST "${LIB_DIR_PATH}/libmrhev.a"
                  "${LIB_DIR_PATH}/libmrhbf.a")
 set(LIB_INCLUDE_LIST "${INCLUDE_DIR_PATH}/mrhshared"
-					 "${INCLUDE_DIR_PATH}/libmrhev"
-					 "${INCLUDE_DIR_PATH}/libmrhbf")
+                     "${INCLUDE_DIR_PATH}/libmrhev"
+                     "${INCLUDE_DIR_PATH}/libmrhbf")
 
 #########################################################################
 #
@@ -109,10 +109,10 @@ set(LIB_INCLUDE_LIST "${INCLUDE_DIR_PATH}/mrhshared"
 ###
 add_executable(mrhuservice ${SRC_LIST_ALL})
 set_target_properties(mrhuservice
-    		          PROPERTIES
-    		          ARCHIVE_OUTPUT_DIRECTORY ${BIN_DIR_PATH}
-    		          LIBRARY_OUTPUT_DIRECTORY ${BIN_DIR_PATH}
-    		          RUNTIME_OUTPUT_DIRECTORY ${BIN_DIR_PATH})
+                      PROPERTIES
+                      ARCHIVE_OUTPUT_DIRECTORY ${BIN_DIR_PATH}
+                      LIBRARY_OUTPUT_DIRECTORY ${BIN_DIR_PATH}
+                      RUNTIME_OUTPUT_DIRECTORY ${BIN_DIR_PATH})
 
 ###
 #  Required Libraries
