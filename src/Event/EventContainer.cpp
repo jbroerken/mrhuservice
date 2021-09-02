@@ -20,6 +20,7 @@
  */
 
 // C / C++
+#include <stdlib.h>
 
 // External
 
