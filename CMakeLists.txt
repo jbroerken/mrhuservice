@@ -42,7 +42,7 @@ project(mrhuservice VERSION 1.0.0
 #  -------------
 #  The paths for our created binary file(s).
 ###
-set(BIN_INSTALL_PATH "/usr/bin/")
+set(BIN_INSTALL_PATH "/usr/local/bin/")
 
 ###
 #  Build Paths
@@ -114,7 +114,7 @@ target_link_libraries(mrhuservice PUBLIC mrhev)
 #  ------------------
 #  Preprocessor source definitions.
 ###
-target_compile_definitions(mrhuservice PRIVATE MRH_LOCALE_FILE_PATH="/etc/MRH_Locale.conf")
+target_compile_definitions(mrhuservice PRIVATE MRH_LOCALE_FILE_PATH="/usr/local/etc/mrh/MRH_Locale.conf")
 target_compile_definitions(mrhuservice PRIVATE MRH_USERVICE_LOG_FILE_PATH_BASE="/var/log/mrh/mrhuservice/mrhuservice_")
 target_compile_definitions(mrhuservice PRIVATE MRH_USERVICE_BACKTRACE_FILE_PATH_BASE="/var/log/mrh/mrhuservice/bt_mrhuservice_")
 target_compile_definitions(mrhuservice PRIVATE MRH_LOGGER_PRINT_CLI=0)
