@@ -124,5 +124,5 @@ target_compile_definitions(mrhuservice PRIVATE MRH_LOGGER_PRINT_CLI=0)
 #  -------
 #  Application installation.
 ###
-install(TARGETS mrhuapp
+install(TARGETS mrhuservice
         DESTINATION ${BIN_INSTALL_PATH})
