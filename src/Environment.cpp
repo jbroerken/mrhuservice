@@ -35,7 +35,7 @@
 
 // Pre-defined
 #ifndef MRH_LOCALE_FILE_PATH
-    #define MRH_LOCALE_FILE_PATH "/etc/MRH_Locale.conf"
+    #define MRH_LOCALE_FILE_PATH "/usr/local/etc/mrh/MRH_Locale.conf"
 #endif
 
 namespace
