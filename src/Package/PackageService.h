@@ -111,6 +111,16 @@ public:
     ~PackageService() noexcept;
     
     //*************************************************************************************
+    // Load
+    //*************************************************************************************
+    
+    /**
+     *  Load the service shared object for the package.
+     */
+    
+    void LoadSharedObject();
+    
+    //*************************************************************************************
     // Init
     //*************************************************************************************
     
@@ -157,6 +167,7 @@ private:
     //*************************************************************************************
 
     // Shared object
+    std::string s_SharedObjectPath;
     void* p_SharedObjectHandle;
 
     // Shared object function locations
@@ -167,9 +178,6 @@ private:
     
     // Event container
     ServiceEventContainer* p_ServiceEventContainer;
-    
-    // Package Info
-    std::string s_PackagePath;
     
     // Event send limit
     MRH_Uint32 u32_EventLimit;

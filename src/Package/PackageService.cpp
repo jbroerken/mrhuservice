@@ -51,49 +51,29 @@ PackageService::PackageService(const char* p_PackagePath,
                                const char* p_EventLimit) : PackageConfiguration(p_PackagePath)
 {
     // Initial setup
+    s_SharedObjectPath = "";
     p_SharedObjectHandle = NULL;
     p_FunctionInitLocation = NULL;
     p_FunctionUpdateLocation = NULL;
     p_FunctionSendEventLocation = NULL;
     p_FunctionExitLocation = NULL;
     p_ServiceEventContainer = NULL;
+    u32_EventLimit = 1;
     
-    // Clear dlerror, might still contain unrelated info
-    dlerror();
-    
-    // Grab shared object from package path
+    // Get shared object path
     if (p_PackagePath == NULL || std::strlen(p_PackagePath) == 0)
     {
         throw Exception("Invalid package path recieved!");
     }
     
-    s_PackagePath = p_PackagePath;
+    s_SharedObjectPath = p_PackagePath;
     
-    if (*(s_PackagePath.end() - 1) != '/')
+    if (*(s_SharedObjectPath.end() - 1) != '/')
     {
-        s_PackagePath += "/";
+        s_SharedObjectPath += "/";
     }
     
-    std::string s_SharedObjectPath(s_PackagePath + PACKAGE_SERVICE_BINARY_PATH);
-    
-    if ((p_SharedObjectHandle = dlopen(s_SharedObjectPath.c_str(), RTLD_NOW)) == NULL)
-    {
-        throw Exception("Failed to load shared object " + s_SharedObjectPath + " (" + std::string(dlerror()) + ")!");
-    }
-    
-    // Get application functions from shared object
-    p_FunctionInitLocation = dlsym(p_SharedObjectHandle, p_FunctionInitName);
-    p_FunctionUpdateLocation = dlsym(p_SharedObjectHandle, p_FunctionUpdateName);
-    p_FunctionSendEventLocation = dlsym(p_SharedObjectHandle, p_FunctionSendEventName);
-    p_FunctionExitLocation = dlsym(p_SharedObjectHandle, p_FunctionExitName);
-    
-    if (p_FunctionInitLocation == NULL ||
-        p_FunctionUpdateLocation == NULL ||
-        p_FunctionSendEventLocation == NULL ||
-        p_FunctionExitLocation == NULL)
-    {
-        throw Exception("Failed to load interaction functions from " + s_SharedObjectPath + " (" + std::string(dlerror()) + ")!");
-    }
+    s_SharedObjectPath += PACKAGE_SERVICE_BINARY_PATH;
     
     // Set event limit to prevent spamming from the user application
     try
@@ -137,6 +117,35 @@ PackageService::ServiceEventContainer::~ServiceEventContainer() noexcept
 {}
 
 //*************************************************************************************
+// Load
+//*************************************************************************************
+
+void PackageService::LoadSharedObject()
+{
+    // Clear dlerror, might still contain unrelated info
+    dlerror();
+    
+    if ((p_SharedObjectHandle = dlopen(s_SharedObjectPath.c_str(), RTLD_NOW)) == NULL)
+    {
+        throw Exception("Failed to load shared object " + s_SharedObjectPath + " (" + std::string(dlerror()) + ")!");
+    }
+    
+    // Get service functions from shared object
+    p_FunctionInitLocation = dlsym(p_SharedObjectHandle, p_FunctionInitName);
+    p_FunctionUpdateLocation = dlsym(p_SharedObjectHandle, p_FunctionUpdateName);
+    p_FunctionSendEventLocation = dlsym(p_SharedObjectHandle, p_FunctionSendEventName);
+    p_FunctionExitLocation = dlsym(p_SharedObjectHandle, p_FunctionExitName);
+    
+    if (p_FunctionInitLocation == NULL ||
+        p_FunctionUpdateLocation == NULL ||
+        p_FunctionSendEventLocation == NULL ||
+        p_FunctionExitLocation == NULL)
+    {
+        throw Exception("Failed to load functions from " + s_SharedObjectPath + " (" + std::string(dlerror()) + ")!");
+    }
+}
+
+//*************************************************************************************
 // Init
 //*************************************************************************************
 
@@ -170,19 +179,16 @@ bool PackageService::Update() noexcept
 
 PackageService::ServiceEventContainer* PackageService::RecieveEvents() noexcept
 {
-    if (p_SharedObjectHandle != NULL && p_FunctionSendEventLocation != NULL)
+    MRH_Event* (*FunctionSendEvent)(void);
+    FunctionSendEvent = reinterpret_cast<MRH_Event*(*)(void)>(p_FunctionSendEventLocation);
+    
+    MRH_Event* p_Event;
+    MRH_Uint32 u32_Recieved = 0; // User service spam protection
+    
+    while (u32_Recieved < u32_EventLimit && (p_Event = FunctionSendEvent()) != NULL)
     {
-        MRH_Event* (*FunctionSendEvent)(void);
-        FunctionSendEvent = reinterpret_cast<MRH_Event*(*)(void)>(p_FunctionSendEventLocation);
-        
-        MRH_Event* p_Event;
-        MRH_Uint32 u32_Recieved = 0; // User service spam protection
-
-        while (u32_Recieved < u32_EventLimit && (p_Event = FunctionSendEvent()) != NULL)
-        {
-            p_ServiceEventContainer->AddEvent(p_Event);
-            ++u32_Recieved;
-        }
+        p_ServiceEventContainer->AddEvent(p_Event);
+        ++u32_Recieved;
     }
     
     return p_ServiceEventContainer;
