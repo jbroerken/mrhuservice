@@ -88,14 +88,14 @@ public:
     void UpdateUserGroupID(uid_t s32_UserID, gid_t s32_GroupID);
     
     //*************************************************************************************
-    // FSRoot
+    // Working Directory
     //*************************************************************************************
     
     /**
-     *  Update FSRoot useage.
+     *  Set the current working directory to the package FSRoot directory.
      */
     
-    void UpdateFSRoot();
+    void UpdateCurrentDir();
     
     //*************************************************************************************
     // Locale
@@ -144,26 +144,6 @@ public:
     std::string GetLocale() const noexcept;
     
 private:
-    
-    //*************************************************************************************
-    // FSRoot
-    //*************************************************************************************
-    
-    /**
-     *  Update the current root directory.
-     *
-     *  \param s_RootPath The full path to the new root directory.
-     */
-    
-    inline void UpdateRootDir(std::string const& s_RootPath);
-    
-    /**
-     *  Update the current working directory.
-     *
-     *  \param s_CurrentPath The full path to the new working directory.
-     */
-    
-    inline void UpdateCurrentDir(std::string const& s_CurrentPath);
     
     //*************************************************************************************
     // Data

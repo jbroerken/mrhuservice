@@ -159,36 +159,20 @@ void Environment::UpdateUserGroupID(uid_t s32_UserID, gid_t s32_GroupID)
 }
 
 //*************************************************************************************
-// FSRoot
+// Working Directory
 //*************************************************************************************
 
-void Environment::UpdateRootDir(std::string const& s_RootPath)
+void Environment::UpdateCurrentDir()
 {
-    if (chroot(s_RootPath.c_str()) < 0)
-    {
-        throw Exception("Failed to change root directory: " + std::string(std::strerror(errno)) + " (" + std::to_string(errno) + ")!");
-    }
-}
-
-void Environment::UpdateCurrentDir(std::string const& s_CurrentPath)
-{
-    if (chdir(s_CurrentPath.c_str()) < 0)
+    std::string s_WorkingDir = s_PackagePath + PACKAGE_FS_ROOT_PATH;
+    
+    if (chdir(s_WorkingDir.c_str()) < 0)
     {
         throw Exception("Failed to change current directory: " + std::string(std::strerror(errno)) + " (" + std::to_string(errno) + ")!");
     }
-}
-
-void Environment::UpdateFSRoot()
-{
-    try
-    {
-        UpdateRootDir(std::string(s_PackagePath + PACKAGE_FS_ROOT_PATH));
-        UpdateCurrentDir("/");
-    }
-    catch (Exception& e)
-    {
-        throw;
-    }
+    
+    Logger::Singleton().Log(Logger::INFO, "Current working dir set to: " + s_WorkingDir,
+                            "Environment.cpp", __LINE__);
 }
 
 //*************************************************************************************

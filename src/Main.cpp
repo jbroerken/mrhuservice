@@ -199,7 +199,7 @@ int main(int argc, const char* argv[])
         // @NOTE: This has to happen in this order before the user app functions are called!
         //        Some environment functions require mrhcore permissions.
         p_Environment->LoadSystemLocale();
-        p_Environment->UpdateFSRoot();
+        p_Environment->UpdateCurrentDir();
         p_Environment->UpdateUserGroupID(p_Service->GetUserID(), p_Service->GetGroupID());
         
         // Initialize app service
